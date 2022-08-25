@@ -1,0 +1,61 @@
+{{ if .Values.daemon_mode.enabled }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "grafana-dashboard-cloner.fullname" . }}
+  labels:
+    {{- include "grafana-dashboard-cloner.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "grafana-dashboard-cloner.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "grafana-dashboard-cloner.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["python3", "grafana-dashboard-cloner.py"]
+          args: ["--daemon", "true", "--daemon-sync-interval-sec", "{{ .Values.daemon_mode.interval_sec }}", "--log-level", "{{ .Values.log_level }}", "--log-format", "{{ .Values.log_format }}"]
+          env:
+            {{- range $name, $value := .Values.envSecret }}
+            - name: {{ $name }}
+              valueFrom:
+                secretKeyRef:
+                  key:  {{ $name }}
+                  name: {{ include "grafana-dashboard-cloner.fullname" $ }}
+            {{- end }}
+
+            {{- range $name, $value := .Values.env }}
+            - name: {{ $name }}
+              value:  {{ $value }}
+            {{- end }}
+
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{ end }}

@@ -1,0 +1,64 @@
+{{ if .Values.cronjob_mode.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "grafana-dashboard-cloner.fullname" . }}
+  labels:
+    {{- include "grafana-dashboard-cloner.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.cronjob_mode.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          {{- with .Values.podAnnotations }}
+          annotations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          labels:
+            {{- include "grafana-dashboard-cloner.selectorLabels" . | nindent 12 }}
+        spec:
+          restartPolicy: OnFailure
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          containers:
+            - name: {{ .Chart.Name }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              env:
+                - name: DAEMON
+                  value: "true"
+                - name: DAEMON_SYNC_INTERVAL_SEC
+                  value: {{ .Values.daemon_mode.interval_sec | quote }}
+
+                {{- range $name, $value := .Values.envSecret }}
+                - name: {{ $name }}
+                  valueFrom:
+                    secretKeyRef:
+                      key:  {{ $name }}
+                      name: {{ include "grafana-dashboard-cloner.fullname" $ }}
+                {{- end }}
+
+                {{- range $name, $value := .Values.env }}
+                - name: {{ $name }}
+                  value:  {{ $value }}
+                {{- end }}
+
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+{{ end }}

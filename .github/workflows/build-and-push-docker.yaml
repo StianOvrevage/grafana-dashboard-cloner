@@ -1,6 +1,9 @@
-name: Build and push
+name: Build and push Docker image
 
-on: push
+on:
+  push:
+    paths-ignore:
+      - 'chart/**'
 
 jobs:
   build:
