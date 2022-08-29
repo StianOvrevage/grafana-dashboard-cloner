@@ -73,6 +73,7 @@ The criteria for if a dashboard is to be cloned each interval is:
 - Collect and count errors instead of exiting immediately
 - Support Grafana Service Accounts: https://grafana.com/docs/grafana/latest/administration/service-accounts/
 - Expose HTTP service with metrics
+  - Expose a metric with time since/until next clone (in daemon mode) so we can easily create a Grafana panel showing time until clone
 
 ### Development: Updating helm chart
 
