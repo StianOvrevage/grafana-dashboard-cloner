@@ -76,7 +76,8 @@ def main():
           logger.debug(f'Found dashboard {dashboard_data["dashboard"]["uid"]} / {dashboard_data["dashboard"]["title"]} in folder {dashboard_data["meta"]["folderTitle"]} which has folderId {destinationFolderIds[dashboard_data["meta"]["folderTitle"]]} in destination')
         else:
           # TODO: Add option to create folders automatically?
-          print('Folder ' + dashboard_data['meta']['folderTitle'] + ' does not exist in destination. Please create it first.')
+          logger.warn('Folder ' + dashboard_data['meta']['folderTitle'] + ' does not exist in destination. Please create it first.')
+          break
       else: # Dashboard is not in a folder
         dashboard['destinationFolderId'] = destinationFolderIds["General"]
         logger.debug(f'Dashboard {dashboard.get("uid")}/{dashboard.get("title")} is without folder (General)')
