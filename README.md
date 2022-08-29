@@ -51,7 +51,7 @@ The configurations `GRAFANA_SOURCE_APIKEY`, `GRAFANA_DESTINATION_APIKEY`, `GRAFA
   helm repo update
 
   kubectl create namespace grafana-dashboard-cloner
-  helm upgrade --install --namespace=grafana-dashboard-cloner grafana-dashboard-cloner grafana-dashboard-cloner --values my-values-file.yaml
+  helm upgrade --install --namespace=grafana-dashboard-cloner grafana-dashboard-cloner grafana-dashboard-cloner/grafana-dashboard-cloner --values my-values-file.yaml
 
 # Features
 
