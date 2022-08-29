@@ -2,8 +2,19 @@ apiVersion: v1
 entries:
   grafana-dashboard-cloner:
   - apiVersion: v2
+    appVersion: 1.0.1
+    created: "2022-08-29T11:08:13.812928816+02:00"
+    description: Tool that will clone dashboards (based on tags) from one Grafana
+      instance to another
+    digest: 1b693ce3420b8a321da91ac1775d5d868a62464e0140adb120c27473e15e9ae0
+    name: grafana-dashboard-cloner
+    type: application
+    urls:
+    - grafana-dashboard-cloner-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-08-29T10:33:13.006434592+02:00"
+    created: "2022-08-29T11:08:13.812559255+02:00"
     description: Tool that will clone dashboards (based on tags) from one Grafana
       instance to another
     digest: ef52b2c4e3b84a76d4b359b0677596ff69f08186b9a157171b0ca082d5e8197b
@@ -14,7 +25,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-08-29T10:33:13.00608562+02:00"
+    created: "2022-08-29T11:08:13.812146685+02:00"
     description: A Helm chart for Kubernetes
     digest: 33508a06664801fa957d808c5cd308de4d6f95970e28518884deacf93215a717
     name: grafana-dashboard-cloner
@@ -22,4 +33,4 @@ entries:
     urls:
     - grafana-dashboard-cloner-0.1.0.tgz
     version: 0.1.0
-generated: "2022-08-29T10:33:13.005595545+02:00"
+generated: "2022-08-29T11:08:13.810612008+02:00"
